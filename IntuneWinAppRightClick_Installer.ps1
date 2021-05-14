@@ -1,5 +1,7 @@
-﻿#Install IntuneWinRightClick
+# Install IntuneWinRightClick
 $InstallPath = "C:\Program Files\IntuneWinAppUtil"
+
+# Create Directory if doesn't exist
 If (!(Test-Path $InstallPath)){
     New-Item -ItemType Directory -Path $InstallPath -Force| Out-Null
 }
@@ -7,7 +9,12 @@ If (!(Test-Path $InstallPath)){
 # Download Latest IntuneWinAppUtil
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/microsoft/Microsoft-Win32-Content-Prep-Tool/master/IntuneWinAppUtil.exe" -OutFile "$InstallPath\IntuneWinAppUtil.exe"
 
-# IntuneWinAppUtil.ps1
+# Create IntuneWinAppUtil.ps1
+# .exe/.msi full path will be passed as an argument to the script
+# Path is extracted and Output folder is created on the Parent Directory (..\Output)
+# A log file with a timestamp is created on the Output folder
+# IntuneWinAppUtil.exe is called with the quite/force argument
+# .intunewin application is created on Output folder
 $IntuneWinAppUtil = "$InstallPath\IntuneWinAppUtil.ps1"
 @'
 $SetupFile = [System.IO.FileInfo]$args[0]
@@ -21,7 +28,7 @@ Start $OutputFolder
 '@ | Out-File -FilePath $IntuneWinAppUtil
 
 
-#Configure registry
+#Configure registry to add Right Click option to .EXE and .MSI
 $powershell = "C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -File ""$IntuneWinAppUtil"" ""%L"""
 New-PSDrive -Name HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT | Out-Null
 # .EXE
