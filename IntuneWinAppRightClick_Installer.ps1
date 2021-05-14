@@ -23,6 +23,9 @@ $TimeStamp = Get-Date -Format "yyyyMMddhhmm"
 $LogName = "$($SetupFile.BaseName).$TimeStamp.log"
 $OutputFolder = (([System.IO.DirectoryInfo]$SetupFile.DirectoryName).Parent).FullName + "\Output"
 $SetupFile = [String]$SetupFile
+If (!(Test-Path $OutputFolder)){
+    New-Item -ItemType Directory -Path $OutputFolder -Force| Out-Null
+}
 Start-Process -FilePath "$PSScriptRoot\IntuneWinAppUtil.exe" -ArgumentList "-c ""$SourceFolder"" -s ""$SetupFile"" -o ""$OutputFolder"" -q" -NoNewWindow -RedirectStandardOutput "$OutputFolder\$LogName"
 Start $OutputFolder
 '@ | Out-File -FilePath $IntuneWinAppUtil
