@@ -36,12 +36,12 @@ $powershell = "C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe -NoProf
 New-PSDrive -Name HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT | Out-Null
 # .EXE
 New-Item -Path "HKCR:\exefile\shell" -Name "IntuneWinApputil" | Out-Null
-Set-Item -Path "HKCR:\exefile\shell\IntuneWinApputil" -Value “Create IntuneWinApp”
+Set-Item -Path "HKCR:\exefile\shell\IntuneWinApputil" -Value "Create IntuneWinApp"
 New-Item -Path "HKCR:\exefile\shell\IntuneWinApputil" -Name "command" | Out-Null
 Set-Item -Path "HKCR:\exefile\shell\IntuneWinApputil\command" -Value $powershell
 # .MSI
 New-Item -Path "HKCR:\Msi.Package\shell" -Name "IntuneWinApputil" | Out-Null
-Set-Item -Path "HKCR:\Msi.Package\shell\IntuneWinApputil" -Value “Create IntuneWinApp”
+Set-Item -Path "HKCR:\Msi.Package\shell\IntuneWinApputil" -Value "Create IntuneWinApp"
 New-Item -Path "HKCR:\Msi.Package\shell\IntuneWinApputil" -Name "command" | Out-Null
 Set-Item -Path "HKCR:\Msi.Package\shell\IntuneWinApputil\command" -Value $powershell
 Remove-PSDrive -Name HKCR
