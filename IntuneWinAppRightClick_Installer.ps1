@@ -28,20 +28,24 @@ If (!(Test-Path $OutputFolder)){
 }
 Start-Process -FilePath "$PSScriptRoot\IntuneWinAppUtil.exe" -ArgumentList "-c ""$SourceFolder"" -s ""$SetupFile"" -o ""$OutputFolder"" -q" -NoNewWindow -RedirectStandardOutput "$OutputFolder\$LogName"
 Start $OutputFolder
-'@ | Out-File -FilePath $IntuneWinAppUtil
+'@ | Out-File -FilePath $IntuneWinAppUtil -Force
 
 
 #Configure registry to add Right Click option to .EXE and .MSI
 $powershell = "C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -File ""$IntuneWinAppUtil"" ""%L"""
 New-PSDrive -Name HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT | Out-Null
 # .EXE
-New-Item -Path "HKCR:\exefile\shell" -Name "IntuneWinApputil" | Out-Null
-Set-Item -Path "HKCR:\exefile\shell\IntuneWinApputil" -Value "Create IntuneWinApp"
-New-Item -Path "HKCR:\exefile\shell\IntuneWinApputil" -Name "command" | Out-Null
-Set-Item -Path "HKCR:\exefile\shell\IntuneWinApputil\command" -Value $powershell
+If (!(Test-Path "HKCR:\exefile\shell\IntuneWinApputil")){
+    New-Item -Path "HKCR:\exefile\shell" -Name "IntuneWinApputil" | Out-Null
+    Set-Item -Path "HKCR:\exefile\shell\IntuneWinApputil" -Value "Create IntuneWinApp"
+    New-Item -Path "HKCR:\exefile\shell\IntuneWinApputil" -Name "command" | Out-Null
+    Set-Item -Path "HKCR:\exefile\shell\IntuneWinApputil\command" -Value $powershell
+}
 # .MSI
-New-Item -Path "HKCR:\Msi.Package\shell" -Name "IntuneWinApputil" | Out-Null
-Set-Item -Path "HKCR:\Msi.Package\shell\IntuneWinApputil" -Value "Create IntuneWinApp"
-New-Item -Path "HKCR:\Msi.Package\shell\IntuneWinApputil" -Name "command" | Out-Null
-Set-Item -Path "HKCR:\Msi.Package\shell\IntuneWinApputil\command" -Value $powershell
+If (!(Test-Path "HKCR:\Msi.Package\shell\IntuneWinApputil")){
+    New-Item -Path "HKCR:\Msi.Package\shell" -Name "IntuneWinApputil" | Out-Null
+    Set-Item -Path "HKCR:\Msi.Package\shell\IntuneWinApputil" -Value "Create IntuneWinApp"
+    New-Item -Path "HKCR:\Msi.Package\shell\IntuneWinApputil" -Name "command" | Out-Null
+    Set-Item -Path "HKCR:\Msi.Package\shell\IntuneWinApputil\command" -Value $powershell
+}
 Remove-PSDrive -Name HKCR
