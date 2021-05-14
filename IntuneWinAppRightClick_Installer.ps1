@@ -32,7 +32,7 @@ Start $OutputFolder
 
 
 #Configure registry to add Right Click option to .EXE and .MSI
-$powershell = "C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe -WindowStyleHidden -NoProfile -File ""$IntuneWinAppUtil"" ""%L"""
+$powershell = "C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe -WindowStyle Hidden -NoProfile -File ""$IntuneWinAppUtil"" ""%L"""
 New-PSDrive -Name HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT | Out-Null
 # .EXE
 If (!(Test-Path "HKCR:\exefile\shell\IntuneWinApputil")){
